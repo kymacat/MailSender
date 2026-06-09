@@ -33,51 +33,6 @@ The app connects via SMTPS on port 465 by default.
 - Secure password storage via iOS Keychain
 - MVP architecture with protocol-based routing
 
-## Requirements
-
-- iOS 17.6+
-- Xcode 16+
-
-## Architecture
-
-```
-MailSender/
-├── AppDelegate.swift
-├── AppRouter.swift
-├── SMTPClient/
-│   ├── SMTPClient.swift        # Core SMTP session (Swift actor)
-│   ├── SMTPCredentials.swift   # Credentials model with lazy password loading
-│   ├── SMTPMail.swift          # Email message model & RFC 2822 formatter
-│   ├── SMTPRequest.swift       # SMTP command serialization
-│   └── SMTPResponse.swift      # SMTP response parser & codes
-├── Helpers/
-│   ├── NetworkUtils.swift      # DNS resolution (getaddrinfo)
-│   ├── SocketError.swift       # Socket error types
-│   ├── TCPConnection.swift     # POSIX socket wrapper
-│   └── TLSConnection.swift     # SecureTransport TLS wrapper
-├── Services/
-│   ├── CredentialsService.swift    # Credential persistence (UserDefaults + Keychain)
-│   ├── PasswordSecureStorage.swift # iOS Keychain wrapper
-│   └── UserCredentials.swift      # Codable credential model
-├── LoginModule/
-│   ├── LoginViewController.swift
-│   ├── LoginPresenter.swift
-│   ├── LoginAssembly.swift
-│   └── LoginRouterProtocol.swift
-└── MailComposerModule/
-    ├── MailComposerViewController.swift
-    ├── MailComposerPresenter.swift
-    ├── MailComposerAssembly.swift
-    └── MailComposerRouterProtocol.swift
-```
-
-Each screen follows MVP with assembly-based dependency injection:
-
-- **ViewController** — UIKit view, implements a ViewProtocol
-- **Presenter** — business logic, holds weak reference to the view
-- **RouterProtocol** — navigation actions, implemented by AppRouter
-- **Assembly** — factory that wires everything together
-
 ## SMTP Session Flow
 
 ```
@@ -95,7 +50,3 @@ Each screen follows MVP with assembly-based dependency injection:
 12. Send message body + <CRLF>.<CRLF> → expect 250
 13. QUIT
 ```
-
-## License
-
-This project is available for educational purposes.
